@@ -158,6 +158,7 @@ table{width:100%;border-collapse:collapse;font-size:15px}td{padding:9px 2px;bord
 .confetti i{position:absolute;top:-10px;width:9px;height:14px;border-radius:2px;animation:fall 2.6s ease-in forwards}
 @keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
 /* v4 */
+.mrow{padding:6px 0}.mrow .bx{cursor:pointer}.mrow .mname{flex:1;text-align:left;min-height:44px;padding:4px 0}.mrow.sel{background:color-mix(in srgb,var(--brand) 9%,transparent);border-radius:12px;padding-left:6px;margin-inline:-6px}
 .week i.pl{box-shadow:inset 0 0 0 2px var(--eq)}.week i.ms{color:var(--hot)}
 .plates{display:flex;flex-wrap:wrap;gap:4px;align-items:center;font-size:13px;color:var(--mute);font-weight:600;margin:6px 0 0 2.6em}
 .pc{display:inline-grid;place-items:center;min-width:30px;height:24px;padding:0 6px;border-radius:6px;font-weight:700;font-size:12px;color:#fff}
@@ -283,7 +284,7 @@ const PLAN=[
  {n:'Upper · Hypertrophy',items:[['incline',3,10,12],['cablerow',3,10,12],['latraise',4,12,15],['curl',3,10,12],['pushdown',3,10,12],['pushup',2,10,25]],end:'Circuit: 3 rounds of 12 KB swings, 10 burpees, 200 m run (12 min)',end2:'Circuit: 3 rounds of 15 squat jumps, 10 burpees, 30 s high knees (12 min)'},
  {n:'Lower · Conditioning',items:[['deadlift',4,4,5],['bss',3,8,8],['thrust',3,10,12],['legraise',3,10,12],['plank',3,45,45]],end:'Zone 2 cardio: 20 min (you can still talk)',end2:'Zone 2 cardio: 20 min brisk walk or easy cycle'}
 ];
-const MOB=[['Cat-cow','× 10'],['World\'s greatest stretch','× 5 per side'],['90/90 hip switches','× 8 per side'],['Deep goblet squat hold','45 s'],['Band pull-aparts','× 15'],['Thoracic rotations','× 8 per side']];
+const MOB=[['Cat-cow','× 10','catcow','On hands and knees. Round your back up to the ceiling, then let the belly drop and look up. Move slowly with your breath.'],['World\'s greatest stretch','× 5 per side','wgs','Step into a deep lunge, put the hand inside your front foot, then rotate and reach the other arm up to the ceiling.'],['90/90 hip switches','× 8 per side','hip90','Sit tall with both knees bent at 90°. Rotate both knees to one side, then the other, without using your hands.'],['Deep goblet squat hold','45 s','gobhold','Hold a light dumbbell at your chest and sit as deep as you can. Push the knees out with your elbows and keep the chest up.'],['Band pull-aparts','× 15','pullapart','Arms straight at shoulder height. Pull the band apart to your chest and squeeze the shoulder blades together.'],['Thoracic rotations','× 8 per side','thoracic','On all fours, one hand behind your head. Rotate that elbow up toward the ceiling, following it with your eyes.']];
 const GOALS={muscle:['💪','Build muscle','Gain size with a small calorie surplus'],strength:['🏋️','Get stronger','Lift heavier, small surplus'],recomp:['⚖️','Recomp','Lose fat and build muscle at maintenance'],fat:['🔥','Lose fat','Keep muscle in a calorie deficit']};
 const EQUIP={gym:['🏢','Full gym','Barbells, machines, cables'],db:['🏠','Dumbbells','Home or hotel gym with dumbbells'],bw:['🤸','Bodyweight','No equipment, just a pull-up bar']};
 const LEVELS={beg:['🌱','Beginner','Under 6 months of training'],int:['⚡','Intermediate','6 months to 2 years'],adv:['🔥','Advanced','2+ years, solid technique']};
@@ -319,7 +320,13 @@ const PAT={
  deadbug:[{hx:115,hy:176,t:-90,th:180,kn:90,ua:180},{hx:115,hy:176,t:-90,th:180,kn:90,th2:95,kn2:0,ua:180,ua2:270}],
  swing:[{t:60,th:20,kn:30,ua:-25,prop:'kb'},{t:0,th:0,kn:3,ua:90,prop:'kb'}],
  run:[{hx:100,hy:110,t:8,th:35,kn:50,th2:-25,kn2:70,ua:-35,el:90,ua2:35,el2:90},{hx:100,hy:110,t:8,th:-25,kn:70,th2:35,kn2:50,ua:35,el:90,ua2:-35,el2:90}],
- stand:[{ua:0,el:10},{ua:5,el:15}]
+ stand:[{ua:0,el:10},{ua:5,el:15}],
+ catcow:[{hx:80,hy:145,t:66,th:0,kn:90,ua:-12,el:0},{hx:80,hy:145,t:84,th:0,kn:90,ua:-35,el:40}],
+ wgs:[{t:30,th:80,kn:85,th2:-5,kn2:76,ua:15,el:0,ua2:15,el2:0},{t:22,th:80,kn:85,th2:-5,kn2:76,ua:15,el:0,ua2:195,el2:0}],
+ hip90:[{hx:100,hy:168,t:-5,th:125,kn:125,ua:35,el:20},{hx:100,hy:168,t:12,th:100,kn:149,ua:35,el:20}],
+ gobhold:[{t:38,th:80,kn:105,ua:60,el:110,prop:'db'},{t:44,th:88,kn:118,ua:60,el:110,prop:'db'}],
+ pullapart:[{ua:90,el:0},{ua:35,el:0}],
+ thoracic:[{hx:80,hy:145,t:70,th:0,kn:90,ua:-14,el:0,ua2:-14,el2:0},{hx:80,hy:145,t:70,th:0,kn:90,ua:-14,el:0,ua2:165,el2:-60}]
 };
 const BASE={t:0,th:0,kn:0,ua:0,el:0,lift:0};
 const val=(P,k)=>P[k]!=null?P[k]:(k.endsWith('2')?val(P,k.slice(0,-1)):BASE[k]);
@@ -685,7 +692,10 @@ function renderLive(){
  let h=`<div class="in"><div class="lvtop"><button class="ib" data-act="minimize" aria-label="Minimize">⌄</button><div class="mid"><b>${esc(A.name)}</b><span class="clock" id="lvClock">${fmt((Date.now()-A.started)/1000)}</span></div><button class="ib" data-act="steps" aria-label="All steps">☰</button></div><div class="prog">${Array.from({length:n},(_,j)=>`<i class="${j<k?'d':j===k?'c':''}"></i>`).join('')}</div>`;
  let bar='';
  if(k===0){
-  h+=`<div class="muted small b">Step 1 · 10 min</div><h2 style="margin:4px 0 12px">Mobility warm-up</h2><div class="lvfig">${(()=>{const s=`<svg viewBox="0 0 200 200" data-live="1" data-p="lunge" aria-hidden="true"></svg>`;return s})()}</div><div class="card" style="margin-top:12px">${MOB.map(([m,d],j)=>`<button class="tick ${A.mob[j]?'on':''}" data-act="mob" data-a="${j}"><span class="bx">${A.mob[j]?'✓':''}</span><span class="tx"><b>${esc(m)}</b> <span class="muted">${esc(d)}</span></span></button>`).join('')}</div>`;
+  const ms=A.mobSel!=null?A.mobSel:(()=>{const f=MOB.findIndex((_,j)=>!A.mob[j]);return f<0?MOB.length-1:f})(),M=MOB[ms];
+  h+=`<div class="muted small b">Step 1 · 10 min · ${A.mob.filter(Boolean).length}/${MOB.length} done</div><h2 style="margin:4px 0 12px">Mobility warm-up</h2><div class="lvfig" style="position:relative"><svg viewBox="0 0 200 200" data-live="1" data-p="${M[2]}" aria-hidden="true"></svg><span class="chip p" style="position:absolute;left:12px;top:12px;margin:0">${ms+1}/${MOB.length}</span></div>
+  <div style="margin:12px 2px 0"><h3 style="margin:0">${esc(M[0])} <span class="muted" style="font-size:17px">${esc(M[1])}</span></h3><p class="small" style="margin:4px 0 0">${esc(M[3])}</p>${A.mob[ms]?'':`<button class="btn ok sm" style="margin-top:8px" data-act="mob" data-a="${ms}">✓ Done, next drill</button>`}</div>
+  <div class="card" style="margin-top:12px">${MOB.map(([m,d],j)=>`<div class="tick mrow ${A.mob[j]?'on':''} ${j===ms?'sel':''}"><button class="bx" data-act="mob" data-a="${j}" aria-label="Mark ${esc(m)} done">${A.mob[j]?'✓':''}</button><button class="tx mname" data-act="mobSel" data-a="${j}"><b>${esc(m)}</b> <span class="muted">${esc(d)}</span>${j===ms?' <span class="chip" style="margin:0 0 0 4px">showing ▶</span>':''}</button></div>`).join('')}</div>`;
   bar=`<button class="btn big" data-act="next">Start lifting →</button>`;
  }else if(k<=A.items.length){
   const it=A.items[k-1],x=EX[it.id],sets=A.sets[it.id],g=suggest(it.id,it.lo,it.hi),cur=sets.findIndex(s=>!s.d),nxt=A.items[k];
@@ -941,7 +951,8 @@ const ACT={
  prev:()=>{const A=A_();A.step=Math.max(0,A.step-1);save();renderLive();$('#live').scrollTop=0},
  steps:()=>{const A=A_();openSheet(`<div class="row"><h2>Workout steps</h2><button class="btn g sm sp" data-act="closeSheet" aria-label="Close">✕</button></div>${['Mobility warm-up',...A.items.map(i=>EX[i.id].n),'Endurance'].map((n,j)=>{const it=A.items[j-1],dn=j===0?A.mob.filter(Boolean).length===MOB.length:it?(A.sets[it.id]||[]).every(s=>s.d):A.endDone;return`<button class="tick ${dn?'on':''}" data-act="goStep" data-a="${j}"><span class="bx">${dn?'✓':''}</span><span class="tx b">${j+1}. ${esc(n)}</span></button>`}).join('')}<button class="btn ok big" style="margin-top:12px" data-act="finishFromSheet">Finish workout now</button><button class="btn g big" style="margin-top:8px;color:var(--hot)" data-act="discard">Discard workout</button>`)},
  goStep:a=>{S.active.step=+a;save();closeSheet();renderLive();$('#live').scrollTop=0},
- mob:a=>{const A=A_();A.mob[+a]=!A.mob[+a];save();renderLive()},
+ mob:a=>{const A=A_(),j=+a;A.mob[j]=!A.mob[j];if(A.mob[j]&&(A.mobSel==null||A.mobSel===j))A.mobSel=null;save();renderLive()},
+ mobSel:a=>{const A=A_();A.mobSel=+a;save();renderLive()},
  warm:a=>{const A=A_(),it=A.items[A.step-1];A.warm=A.warm||{};const w=A.warm[it.id]=A.warm[it.id]||[];w[+a]=!w[+a];save();renderLive();if(w[+a])rest(60,'Warm-up rest: short and easy')},
  feel:a=>{const A=A_(),it=A.items[A.step-1];A.feel=A.feel||{};A.feel[it.id]=a;save();renderLive();toast(a==='easy'?'Noted: more weight next time 💪':a==='hard'?'Noted: we\'ll hold this weight next time':'Perfect: steady progress')},
  liveSwap:()=>{const A=A_(),it=A.items[A.step-1],x=EX[it.id],used=new Set(A.items.map(i=>i.id)),ok=e=>EQOK[S.profile.eq||'gym'].includes(e);
