@@ -526,6 +526,7 @@ function vDiet(){
  const M=macros(),D=DIETS[S.diet]||DIETS.classic,f=M.kcal/2400,F=today(),t=trend();
  const eaten=D.m.filter((_,k)=>F.m[k]).length;
  return `<div class="card"><div class="row" style="gap:16px;align-items:center">${donut(M)}<div style="flex:1"><div class="muted small b">${esc(GOALS[S.profile.goal][1])}</div><div class="bars">${[['Protein',M.pro,'var(--brand)'],['Carbs',M.carb,'var(--sky)'],['Fat',M.fat,'var(--hot)']].map(([n,g,c])=>`<div style="margin:6px 0"><div class="row small"><span class="b">${n}</span><span class="sp b">${g} g</span></div><div class="t" style="height:8px"><i style="width:100%;background:${c}"></i></div></div>`).join('')}</div></div></div><div class="note${t.warn?' hot':''}">${esc(t.txt)}</div></div>
+ ${(()=>{const b=S.logs.filter(l=>l.watch&&dk(l.d)===dk(Date.now())).reduce((a,l)=>a+(l.watch.kcal||0),0);return b?`<div class="card coach"><div class="ic">🔥</div><div><div class="b">${b.toLocaleString()} kcal burned in training today</div><div class="small muted">From your Apple Watch. Your daily target already includes training, so stick to it. On very long sessions (600+ kcal) add a snack with carbs and protein.</div></div></div>`:''})()}
  <div class="card"><div class="row"><h3 style="margin:0">Water</h3><span class="sp muted small b">${F.w}/${M.glasses} glasses · ${M.water} L</span></div><div class="hscroll" style="margin-top:10px">${Array.from({length:M.glasses},(_,k)=>`<button class="tog ${k<F.w?'on':''}" style="min-width:40px;padding:8px" data-act="water" data-a="${k+1}" aria-label="${k+1} glasses">💧</button>`).join('')}</div></div>
  <div class="seg">${Object.entries(DIETS).map(([k,d])=>`<button class="${k===S.diet?'on':''}" data-act="diet" data-a="${k}">${esc(d.n)}</button>`).join('')}</div>
  <div class="card"><div class="row"><h3 style="margin:0">Today's meals</h3><span class="sp muted small b">${eaten}/${D.m.length} eaten</span></div><p class="muted small" style="margin:4px 0 6px">${esc(D.d)} Portions are scaled to ${M.kcal.toLocaleString()} kcal.</p>${D.m.map(([t,ic,items],k)=>`<button class="tick ${F.m[k]?'on':''}" data-act="meal" data-a="${k}"><span class="bx">${F.m[k]?'✓':''}</span><span><span class="b">${ic} ${esc(t)}</span><br><span class="small tx">${portions(items,f)}</span></span></button>`).join('')}</div>
@@ -542,8 +543,10 @@ function vStats(){
  h+=`<div class="card"><h3>Strength progress</h3>${lifts.length?`<select id="statLift" aria-label="Choose lift">${lifts.map(id=>`<option value="${id}" ${id===statLift?'selected':''}>${esc(EX[id].n)}</option>`).join('')}</select><div class="fig2" style="margin-top:10px"><svg id="liftChart"></svg></div><p class="muted small" style="margin:6px 0 0">Estimated 1-rep max per session (best ${bestOf(statLift).e} kg, heaviest set ${bestOf(statLift).w} kg).</p>`:'<p class="muted small">Log weighted sets to see your strength curve.</p>'}</div>`;
  h+=`<div class="card"><h3>Sets per muscle this week</h3><p class="muted small" style="margin:0 0 6px">Aim for 10–20 sets per muscle each week (grey under 10, blue on target, green over 20).</p><div class="bars">${Object.keys(MUS).map(m=>{const v=Math.round(ms[m]*2)/2;return`<div class="r"><span>${MUS[m]}</span><div class="t"><i class="${v<10?'lo':v>20?'hi':''}" style="width:${Math.min(100,v/20*100)}%"></i></div><span class="n">${v}</span></div>`}).join('')}</div></div>`;
  h+=`<div class="card"><div class="row"><h3 style="margin:0">Bodyweight</h3><span class="sp b">${cur} kg</span></div>${tw?`<p class="muted small" style="margin:2px 0 0">Goal ${tw} kg · ${Math.abs(cur-tw).toFixed(1)} kg to go</p>`:''}<div class="row" style="margin-top:10px"><input id="bwIn" type="number" step="0.1" inputmode="decimal" placeholder="Today's weight (kg)"><button class="btn" data-act="bwAdd">Log</button></div>${bw.length>1?`<div class="fig2" style="margin-top:10px"><svg id="bwChart"></svg></div>`:''}<div class="note${trend().warn?' hot':''}">${esc(trend().txt)}</div></div>`;
+ const wl=S.logs.filter(l=>l.watch&&l.watch.hr);const wkK=S.logs.filter(l=>l.watch&&inWeek(l,weekStart(Date.now()))).reduce((a,l)=>a+(l.watch.kcal||0),0);
+ h+=`<div class="card"><div class="row"><h3 style="margin:0">⌚ Apple Watch</h3><button class="btn g sm sp" data-act="watch">+ Add data</button></div>${wl.length?`<div class="stats" style="margin-top:12px"><div class="stat"><b>${wl[0].watch.hr}</b><span>Last avg bpm</span></div><div class="stat"><b>${Math.max(...wl.map(l=>l.watch.max||0))||'–'}</b><span>Top bpm</span></div><div class="stat"><b>${wkK.toLocaleString()}</b><span>kcal this week</span></div></div>${wl.length>1?`<div class="fig2" style="margin-top:10px"><svg id="hrChart"></svg></div>`:''}<div class="note small">Last session: ${esc(hrZone(wl[0].watch.hr)[0])}, ${esc(hrZone(wl[0].watch.hr)[1])} (based on max heart rate ≈ ${220-num(S.profile.age)}). Strength days usually sit in Zone 2–3; your intervals should reach Zone 4.</div>`:`<p class="small muted" style="margin:8px 0 0">Bring in heart rate and calories from your Watch after each workout. Tap <b>+ Add data</b> to set it up.</p>`}</div>`;
  h+=`<div class="card"><h3>Badges</h3><div class="ach">${ACH.map(([k,ic,n])=>`<div class="${S.ach[k]?'on':''}"><em>${ic}</em>${esc(n)}</div>`).join('')}</div></div>`;
- h+=`<div class="card"><h3>History</h3>${S.logs.length?S.logs.slice(0,20).map((l,k)=>{const v=(l.items||[]).reduce((a,i)=>a+(i.sets||[]).reduce((b,s)=>b+num(s.w)*num(s.r),0),0);return`<button class="ex" data-act="log" data-a="${k}"><div><div class="nm">${esc(l.n)}</div><div class="muted small">${esc(new Date(l.d).toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short'}))} · ${l.min?l.min+' min · ':''}${Math.round(v).toLocaleString()} kg</div></div><span class="arrow">›</span></button>`}).join(''):'<p class="muted small">Your finished workouts appear here.</p>'}</div>`;
+ h+=`<div class="card"><h3>History</h3>${S.logs.length?S.logs.slice(0,20).map((l,k)=>{const v=(l.items||[]).reduce((a,i)=>a+(i.sets||[]).reduce((b,s)=>b+num(s.w)*num(s.r),0),0);return`<button class="ex" data-act="log" data-a="${k}"><div><div class="nm">${esc(l.n)}</div><div class="muted small">${esc(new Date(l.d).toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short'}))} · ${l.min?l.min+' min · ':''}${Math.round(v).toLocaleString()} kg${l.watch?` · ❤️ ${l.watch.hr||'–'} · 🔥 ${l.watch.kcal||0}`:''}</div></div><span class="arrow">›</span></button>`}).join(''):'<p class="muted small">Your finished workouts appear here.</p>'}</div>`;
  return h;
 }
 let observers=[];
@@ -560,8 +563,44 @@ function afterRender(){
  observers.forEach(o=>o.disconnect());observers=[];
  document.querySelectorAll('svg[data-still]').forEach(el=>{if(!el.innerHTML)fillFig(el,.65)});
  const lc=$('#liftChart');if(lc&&statLift){const pts=[];S.logs.slice().reverse().forEach(l=>(l.items||[]).forEach(i=>{if(i.id===statLift&&i.sets&&i.sets.length){const e=Math.max(...i.sets.map(s=>e1(num(s.w),num(s.r))));if(e>0)pts.push({l:shortD(l.d),v:Math.round(e*10)/10})}}));lineChart(lc,pts.slice(-20),'kg')}
+ const hc=$('#hrChart');if(hc)lineChart(hc,S.logs.filter(l=>l.watch&&l.watch.hr).slice(0,20).reverse().map(l=>({l:shortD(l.d),v:l.watch.hr})),'bpm');
  const bc=$('#bwChart');if(bc)lineChart(bc,S.bw.slice().sort((a,b)=>a.d<b.d?-1:1).slice(-30).map(x=>({l:shortD(x.d),v:num(x.w)})),'kg');
 }
+
+// ================= APPLE WATCH =================
+const SC_NAME='Gym Coach Watch';
+function parseWatch(t){if(!t)return null;const m={};String(t).replace(/\b(min|hr|maxhr|kcal)\s*[=:]\s*([\d.,]+)/gi,(_,k,v)=>{m[k.toLowerCase()]=num(String(v).replace(',','.'))});if(!m.hr&&!m.kcal)return null;return{min:Math.round(m.min||0),hr:Math.round(m.hr||0),max:Math.round(m.maxhr||0),kcal:Math.round(m.kcal||0)}}
+function attachWatch(w,idx){
+ let k=(idx===''||idx==null)?null:+idx;
+ if(k==null){const L=S.logs[0];k=L&&!L.watch&&(Date.now()-new Date(L.d))<6*36e5?0:-1}
+ if(k>=0&&S.logs[k]){S.logs[k].watch=w;if(!S.logs[k].min&&w.min)S.logs[k].min=w.min}
+ else{S.logs.unshift({d:new Date().toISOString(),n:'Apple Watch workout',src:'watch',items:[],mob:false,end:true,min:w.min||0,watch:w});k=0}
+ if(summary&&k===0)summary.log=S.logs[0];
+ save();render();toast(`⌚ Saved: ❤️ ${w.hr||'–'} bpm · 🔥 ${w.kcal||0} kcal`);return k}
+function hrZone(hr){const mx=220-num(S.profile.age||30),p=hr/mx;return p<.6?['Zone 1','easy recovery']:p<.7?['Zone 2','fat-burning base']:p<.8?['Zone 3','aerobic fitness']:p<.9?['Zone 4','threshold, hard']:['Zone 5','max effort']}
+const watchLine=w=>w?`❤️ ${w.hr||'–'} avg${w.max?` · ${w.max} max`:''} bpm · 🔥 ${w.kcal||0} kcal`:'';
+const SC_STEPS=[
+ ['Create it','Open the <b>Shortcuts</b> app → tap <b>+</b> → rename the shortcut exactly <b>Gym Coach Watch</b>.'],
+ ['Ask for minutes','Add <b>Ask for Input</b>: Input Type <b>Number</b>, Prompt "Workout minutes", Default Answer <b>Shortcut Input</b>.'],
+ ['Heart rate','Add <b>Find Health Samples</b>: Type <b>Heart Rate</b>, filter <b>Start Date</b> · <b>is in the last</b> · <b>Provided Input</b> <b>minutes</b>.'],
+ ['Average & max','Add <b>Calculate Statistics</b> → <b>Average</b> of Health Samples. Add another <b>Calculate Statistics</b> → <b>Maximum</b> of the same Health Samples.'],
+ ['Calories','Add <b>Find Health Samples</b>: Type <b>Active Energy</b>, same filter (in the last Provided Input minutes). Add <b>Calculate Statistics</b> → <b>Sum</b>.'],
+ ['Build the text','Add <b>Text</b> and type: <code>GC min=</code>[Provided Input] <code>hr=</code>[Average] <code>maxhr=</code>[Maximum] <code>kcal=</code>[Sum]. Pick each [ ] from the variable bar.'],
+ ['Copy & notify','Add <b>Copy to Clipboard</b>, then <b>Show Notification</b> "Watch data copied. Go back to Gym Coach and tap Import".'],
+ ['First run','Run it once and tap <b>Allow</b> for Health access. Done: you only set this up once.']];
+const scSteps=()=>SC_STEPS.map(([t,d],i)=>`<div class="row" style="align-items:flex-start;margin:10px 0"><span class="chip p" style="margin:0;min-width:26px;justify-content:center">${i+1}</span><div><b>${t}</b><div class="small">${d}</div></div></div>`).join('');
+function watchSheet(idx){
+ const k=(idx===''||idx==null)?0:+idx,L=S.logs[k],min=Math.max(10,(L&&L.min)||60),ago=L?Math.round((Date.now()-new Date(L.d))/60000):0;
+ openSheet(`<div class="row"><div><div class="muted small b">${L?esc(L.n):'Apple Watch'}</div><h2>Add Apple Watch data</h2></div><button class="btn g sm sp" data-act="closeSheet" aria-label="Close">✕</button></div>
+ <p class="small muted">Pulls your heart rate and active calories for this workout from Apple Health (recorded by your Watch).</p>
+ ${L&&ago>min+90?`<div class="note hot small">This workout ended ${Math.round(ago/60)} h ago. The shortcut reads the <b>last ${min} minutes</b>, so it only works right after a workout. Use manual entry below instead.</div>`:''}
+ <a class="btn big" style="margin-top:12px" href="shortcuts://run-shortcut?name=${encodeURIComponent(SC_NAME)}&input=text&text=${min}">⌚ 1. Run the Watch shortcut</a>
+ <button class="btn ok big" style="margin-top:8px" data-act="watchPaste" data-a="${idx??''}">📋 2. Import copied data</button>
+ <p class="muted small" style="margin:6px 2px 0">Tip: in step 1 confirm ${min} minutes, then come back here and tap Import. iPhone may ask to allow pasting: tap <b>Allow Paste</b>.</p>
+ <details style="margin-top:14px"><summary class="b" style="cursor:pointer;min-height:36px">✍️ Enter manually instead</summary><p class="muted small">Find these in the Fitness app → your workout.</p><div class="grid2"><div><label class="l" for="wHr">Avg heart rate</label><input id="wHr" type="number" inputmode="numeric" placeholder="bpm"></div><div><label class="l" for="wMax">Max heart rate</label><input id="wMax" type="number" inputmode="numeric" placeholder="bpm"></div><div><label class="l" for="wKcal">Active calories</label><input id="wKcal" type="number" inputmode="numeric" placeholder="kcal"></div><div style="display:flex;align-items:flex-end"><button class="btn" style="width:100%" data-act="watchManual" data-a="${idx??''}">Save</button></div></div></details>
+ <details style="margin-top:6px"><summary class="b" style="cursor:pointer;min-height:36px">🛠 First time? Set up the shortcut (5 min, once)</summary>${scSteps()}</details>`);
+}
+(function(){try{const q=new URLSearchParams(location.search);if(q.get('watch')){const w=parseWatch([...q.entries()].map(([a,b])=>a+'='+b).join(' '));history.replaceState(null,'',location.pathname+location.hash);if(w)setTimeout(()=>attachWatch(w),300)}}catch(e){}})();
 
 // ================= RENDER =================
 const TABS={home:'Home',plan:'Your plan',lib:'Exercises',diet:'Nutrition',stats:'Progress'};
@@ -612,6 +651,7 @@ function profileSheet(){
  <div><label class="l" for="pRest">Rest timer</label><select id="pRest" data-in="rest">${[60,90,120,150].map(v=>`<option value="${v}" ${S.set.rest===v?'selected':''}>${v} s (+60 s on heavy lifts)</option>`).join('')}</select></div></div>
  <h3 style="margin-top:18px">Training days</h3><p class="muted small" style="margin:4px 0 8px">Your 4 workouts rotate through these days. Home and the coach follow this schedule.</p><div class="dayp">${WK.map(d=>`<button class="${S.days.includes(d)?'on':''}" data-act="dayTog" data-a="${d}" aria-label="${DAYN[d]}">${DAYN[d].slice(0,3)}</button>`).join('')}</div>
  <button class="tick ${S.set.sound?'on':''}" data-act="sound" style="margin-top:10px"><span class="bx">${S.set.sound?'✓':''}</span><span>Beep when rest is over</span></button><button class="tick ${S.set.voice?'on':''}" data-act="voiceSet"><span class="bx">${S.set.voice?'✓':''}</span><span>Voice narration in video tutorials</span></button>
+ <h3 style="margin-top:18px">⌚ Apple Watch</h3><p class="muted small" style="margin:4px 0 8px">After a workout, tap <b>Add Apple Watch data</b> on the summary screen to bring in heart rate and calories. It needs a one-time Shortcut setup.</p><details><summary class="b" style="cursor:pointer;min-height:36px">Show setup steps</summary>${scSteps()}</details><button class="btn g big" style="margin-top:6px" data-act="watch">Add Watch data to last workout</button>
  <h3 style="margin-top:18px">Backup</h3><p class="muted small" style="margin:4px 0 10px">Your data is stored on this phone. Export a backup now and then, or to move to a new phone.</p><div class="grid2"><button class="btn g" data-act="exp">⬇ Export</button><label class="btn g" style="cursor:pointer">⬆ Import<input type="file" id="imp" accept=".json,application/json" hidden></label></div>
  <div class="grid2" style="margin-top:18px"><button class="btn g" data-act="redo">Redo setup</button><button class="btn g" data-act="reset" style="color:var(--hot)">Reset ${esc(myName())}</button></div>`);
 }
@@ -620,6 +660,7 @@ function logSheet(k){
  openSheet(`<div class="row"><div><div class="muted small b">${esc(new Date(l.d).toLocaleString(undefined,{weekday:'long',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}))}</div><h2>${esc(l.n)}</h2></div><button class="btn g sm sp" data-act="closeSheet" aria-label="Close">✕</button></div>
  <table style="margin-top:12px">${(l.items||[]).filter(i=>EX[i.id]).map(i=>`<tr><td><b>${esc(EX[i.id].n)}</b><br><span class="muted small">${(i.sets||[]).map(s=>`${num(s.w)}×${num(s.r)}`).join(' · ')}</span></td><td class="n">${Math.round((i.sets||[]).reduce((a,s)=>a+num(s.w)*num(s.r),0)).toLocaleString()} kg</td></tr>`).join('')}</table>
  <p class="small muted">${l.mob?'✓ Mobility':'– Mobility skipped'} · ${l.end?'✓ Endurance':'– Endurance skipped'}${l.min?` · ${l.min} min`:''}</p>
+ ${l.watch?`<div class="note"><b>⌚ Apple Watch</b><br>${esc(watchLine(l.watch))}<br><span class="small muted">${esc(hrZone(l.watch.hr)[0])}: ${esc(hrZone(l.watch.hr)[1])}</span></div>`:`<button class="btn g big" style="margin:4px 0 10px" data-act="watch" data-a="${k}">⌚ Add Apple Watch data</button>`}
  <button class="btn g" data-act="delLog" data-a="${k}" style="color:var(--hot)">Delete this workout</button>`);
 }
 
@@ -739,6 +780,7 @@ function summaryHtml(){
  <div class="stats" style="margin:20px 0"><div class="stat"><b>${s.log.min}</b><span>Minutes</span></div><div class="stat"><b>${s.sets}</b><span>Sets</span></div><div class="stat"><b>${Math.round(s.vol).toLocaleString()}</b><span>kg lifted</span></div></div>
  ${s.prs.length?`<div class="card" style="text-align:left"><h3>📈 New personal records</h3>${s.prs.map(id=>`<div class="b" style="margin:6px 0">${esc(EX[id].n)}: ${bestOf(id).w} kg</div>`).join('')}</div>`:''}
  ${s.got.length?`<div class="card" style="text-align:left"><h3>Badges unlocked</h3><div class="ach">${s.got.map(k=>{const a=ACH.find(x=>x[0]===k);return`<div class="on"><em>${a[1]}</em>${esc(a[2])}</div>`}).join('')}</div></div>`:''}
+ <div class="card" style="text-align:left">${s.log.watch?`<div class="row"><b>⌚ Apple Watch</b><span class="sp small b">${esc(hrZone(s.log.watch.hr)[0])}</span></div><div style="margin-top:4px">${esc(watchLine(s.log.watch))}</div><div class="muted small">${esc(hrZone(s.log.watch.hr)[0])}: ${esc(hrZone(s.log.watch.hr)[1])}</div>`:`<div class="b">⌚ Wore your Apple Watch?</div><div class="small muted" style="margin:2px 0 10px">Add heart rate and calories from this workout.</div><button class="btn g" data-act="watch" data-a="0">Add Apple Watch data</button>`}</div>
  <div class="card" style="text-align:left"><div class="b">Up next</div><div>${typeof s.log.src==='number'?`Day ${S.next+1}: ${esc(PLAN[S.next].n)}`:'Back to your 4-day plan'}. Have about ${macros().pro>0?Math.round(macros().pro/4):30} g protein within 2 hours.</div></div>
  <button class="btn big" data-act="closeSummary">Done</button></div>`;
 }
@@ -853,6 +895,9 @@ function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clea
 const A_=()=>S.active;
 const ACT={
  tab:a=>{location.hash=a},
+ watch:a=>watchSheet(a),
+ watchPaste:async a=>{try{if(!navigator.clipboard||!navigator.clipboard.readText)throw 0;const t=await navigator.clipboard.readText();const w=parseWatch(t);if(!w){toast('No Watch data on the clipboard yet. Run the shortcut first.');return}closeSheet();attachWatch(w,a)}catch(e){toast('Couldn\'t read the clipboard. Use "Enter manually" below.')}},
+ watchManual:a=>{const w={min:0,hr:Math.round(num($('#wHr').value)),max:Math.round(num($('#wMax').value)),kcal:Math.round(num($('#wKcal').value))};if(!w.hr&&!w.kcal){toast('Enter heart rate or calories');return}if(w.hr&&(w.hr<40||w.hr>230)){toast('Heart rate looks off: check it');return}closeSheet();attachWatch(w,a)},
  tut:(a,el)=>tutOpen(a,+el.dataset.s,+el.dataset.lo,+el.dataset.hi),
  tutClose:()=>{if(T)cancelAnimationFrame(T.raf);T=null;try{speechSynthesis.cancel()}catch(e){}$('#tut').classList.remove('open')},
  tutPlay:()=>{if(!T)return;if(T.t>=T.tot){T.t=0;T.cur=-1;T.play=true}else{T.play=!T.play;if(T.play){T.cur=-1}else{try{speechSynthesis.cancel()}catch(e){}}}$('#tutPlayB').textContent=T.play?'⏸':'▶'},
