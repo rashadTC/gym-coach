@@ -196,6 +196,12 @@ img.thumb{object-fit:cover}
 .stage>svg{position:absolute;inset:6% 6% 4%;width:88%;height:90%}
 .stage .lb{stroke:#e8ecff}.stage .lb.t{stroke:#b9c3f2}.stage .hd{fill:#e8ecff}.stage .fl{stroke:#ffffff40}.stage .sd{fill:#0006}.stage .eq,.stage .eqs{fill:#59649a;stroke:#59649a}.stage .plate{fill:#4f6bff}.stage .hub{fill:#0e1430}
 #tutMap{position:absolute;inset:8%;display:none}#tutMap svg{width:100%;height:100%}#tutMap .m{fill:#1b2450;stroke:#2c3772}#tutMap .bd{fill:#2c3772}#tutMap .m.s{fill:#7a3a2c}#tutMap .m.p{fill:var(--hot);filter:drop-shadow(0 0 6px #ff5a36aa)}#tutMap text{fill:#9aa3c9}
+.stage{aspect-ratio:4/3!important}.stage::after{display:none}
+.tph{position:absolute;inset:0}.tph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;will-change:opacity,transform}
+.tph::after{content:"";position:absolute;inset:0;background:linear-gradient(#0006,transparent 22%,transparent 62%,#000b)}
+.pip{position:absolute;right:10px;top:54px;width:92px;height:86px;background:#0a0f2ccc;border-radius:14px;padding:4px;backdrop-filter:blur(6px)}
+.pip svg{width:100%;height:100%}.pip .m{fill:#1b2450;stroke:#2c3772}.pip .bd{fill:#2c3772}.pip .m.s{fill:#7a3a2c}.pip .m.p{fill:var(--hot)}.pip text{display:none}
+.badfx{position:absolute;inset:0;pointer-events:none;border-radius:24px;opacity:0;transition:opacity .3s}.badfx.bad{opacity:1;box-shadow:inset 0 0 0 4px #ff3b30,inset 0 0 70px #ff3b3080}.badfx.good{opacity:1;box-shadow:inset 0 0 0 4px #17b27a,inset 0 0 60px #17b27a66}
 .tchip{position:absolute;left:12px;top:12px;background:#0009;backdrop-filter:blur(6px);padding:6px 12px;border-radius:99px;font-weight:700;font-size:14px}
 .tbadge{position:absolute;right:12px;top:12px;padding:6px 12px;border-radius:99px;font-weight:700;font-size:14px;display:none}
 .tbadge.bad{display:block;background:#ff3b30}.tbadge.good{display:block;background:var(--ok)}
@@ -228,7 +234,7 @@ img.thumb{object-fit:cover}
 <div id="live" role="dialog" aria-modal="true"></div>
 <div id="rest" role="dialog" aria-modal="true"></div>
 <div id="onb" role="dialog" aria-modal="true"></div>
-<div id="tut" role="dialog" aria-modal="true" aria-label="Exercise tutorial"><div class="in"><div class="row"><button class="ib" data-act="tutClose" aria-label="Close tutorial">✕</button><div class="mid"><b id="tutName"></b><span id="tutTime"></span></div><button class="ib" data-act="tutVoice" id="tutVoiceB" aria-label="Voice on or off">🔊</button></div><div class="stage" id="tutStage"><svg id="tutSvg" viewBox="0 0 200 200" aria-hidden="true"></svg><div id="tutMap"></div><span class="tchip" id="tutCh"></span><span class="tbadge" id="tutBadge"></span><span class="ttempo" id="tutTempo"></span><span class="trep" id="tutRep"></span></div><div class="tsegs" id="tutSegs"></div><p class="tcap" id="tutCap" aria-live="polite"></p><div class="tctl"><button data-act="tutPrev" aria-label="Previous chapter">⏮</button><button class="pl" data-act="tutPlay" id="tutPlayB" aria-label="Play or pause">⏸</button><button data-act="tutNext" aria-label="Next chapter">⏭</button></div><div class="row" style="justify-content:center;margin-top:14px"><a class="btn sm" style="background:#ffffff14" id="tutYT" target="_blank" rel="noopener">▶ Real videos on YouTube</a></div></div></div>
+<div id="tut" role="dialog" aria-modal="true" aria-label="Exercise tutorial"><div class="in"><div class="row"><button class="ib" data-act="tutClose" aria-label="Close tutorial">✕</button><div class="mid"><b id="tutName"></b><span id="tutTime"></span></div><button class="ib" data-act="tutVoice" id="tutVoiceB" aria-label="Voice on or off">🔊</button></div><div class="stage" id="tutStage"><div class="tph" id="tutPh"><img id="tutA" alt="Start position"><img id="tutB" alt="Finish position"></div><div class="badfx" id="tutFx"></div><div class="pip" id="tutPip" aria-hidden="true"></div><svg id="tutSvg" viewBox="0 0 200 200" aria-hidden="true" style="display:none"></svg><div id="tutMap"></div><span class="tchip" id="tutCh"></span><span class="tbadge" id="tutBadge"></span><span class="ttempo" id="tutTempo"></span><span class="trep" id="tutRep"></span></div><div class="tsegs" id="tutSegs"></div><p class="tcap" id="tutCap" aria-live="polite"></p><div class="tctl"><button data-act="tutPrev" aria-label="Previous chapter">⏮</button><button class="pl" data-act="tutPlay" id="tutPlayB" aria-label="Play or pause">⏸</button><button data-act="tutNext" aria-label="Next chapter">⏭</button></div><div class="row" style="justify-content:center;margin-top:14px"><a class="btn sm" style="background:#ffffff14" id="tutYT" target="_blank" rel="noopener">▶ Real videos on YouTube</a></div></div></div>
 <div id="toast" role="status"></div>
 
 <script>
@@ -864,11 +870,11 @@ const BREATH={plank:'Breathe slowly and steadily the whole time. Never hold your
 function chapters(id,s,lo,hi){
  const x=EX[id],g=suggest(id,lo,hi),ms=MIST[TG[x.p]]||[],pri=x.pri.map(m=>MUS[m].toLowerCase()).join(' and '),sec=x.sec.map(m=>MUS[m].toLowerCase()).join(', ');
  const ch=[
-  {k:'Muscles',mode:'map',say:`${x.n}. This works your ${pri}${sec?`, with help from your ${sec}`:''}.`},
+  {k:'Muscles',mode:'map',say:`Let's learn the ${x.n.toLowerCase()}. This one works your ${pri}${sec?`, with help from your ${sec}`:''}.`},
   {k:'Why it matters',mode:'move',rate:.7,say:x.b},
-  {k:'Setup',mode:'hold',f:0,say:`Setup. ${x.c[0]}.`},
+  {k:'Setup',mode:'hold',f:0,say:`First, get set up. ${x.c[0]}.`},
   {k:'Slow motion',mode:'move',rate:.45,tempo:1,say:`In slow motion: ${x.c[1].charAt(0).toLowerCase()+x.c[1].slice(1)}.`},
-  {k:'Full speed',mode:'move',rate:1,tempo:1,count:1,say:`At full speed. ${x.c[2]}. Control the lowering for about two seconds, then drive up powerfully.`},
+  {k:'Full speed',mode:'move',rate:1,tempo:1,count:1,say:`Now at normal speed. ${x.c[2]}. Take about two seconds on the way down, then drive up with power.`},
   ...ms.map(([w,m,fx],i)=>({k:`Mistake ${i+1}`,mode:'mistake',m,w,fx,say:`Common mistake: ${w}. Instead, ${fx}.`})),
   {k:'Breathing',mode:'move',rate:1,tempo:1,say:BREATH[x.p]||'Breathe in and brace your core before each rep. Breathe out as you push through the hardest part.'},
   {k:'Your target',mode:'move',rate:1,count:1,say:`Today: ${s} sets of ${reps(lo,hi,x).replace('–',' to ').replace('/leg',' per leg')}${x.u==='s'?'':' reps'}. ${g.txt}`}
@@ -882,11 +888,14 @@ function tutOpen(id,s,lo,hi){
  const x=EX[id],ch=chapters(id,s,lo,hi);
  T={id,x,ch,tot:ch.reduce((a,c)=>a+c.d,0),t:0,play:true,last:performance.now(),cur:-1,raf:0};
  $('#tutName').textContent=x.n;$('#tutYT').href='https://www.youtube.com/results?search_query='+encodeURIComponent(x.n+' proper form');
- $('#tutMap').innerHTML=mmap(x.pri,x.sec);$('#tutVoiceB').textContent=S.set.voice?'🔊':'🔇';
+ $('#tutMap').innerHTML=mmap(x.pri,x.sec);$('#tutPip').innerHTML=mmap(x.pri,x.sec);$('#tutA').src=`img/${id}-0.jpg`;$('#tutB').src=`img/${id}-1.jpg`;$('#tutB').style.opacity=0;$('#tutVoiceB').textContent=S.set.voice?'🔊':'🔇';
  $('#tutSegs').innerHTML=ch.map((c,i)=>`<button data-act="tutSeg" data-a="${i}" style="flex:${c.d.toFixed(1)}" aria-label="${esc(c.k)}"><i><b></b></i></button>`).join('');
  $('#tut').classList.add('open');T.raf=requestAnimationFrame(tutFrame);
 }
-function tutSpeak(txt){try{if(!('speechSynthesis' in window))return;speechSynthesis.cancel();if(!S.set.voice||!T||!T.play)return;const u=new SpeechSynthesisUtterance(txt);u.rate=1;u.pitch=1;u.lang='en-US';speechSynthesis.speak(u)}catch(e){}}
+let tutVoiceObj=null;
+function pickVoice(){try{const vs=speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang));if(!vs.length)return null;const rank=v=>(/premium|enhanced|neural|natural/i.test(v.name)?10:0)+(/siri|samantha|ava|allison|evan|nathan|zoe|serena|daniel|karen|moira|google us english|aria|jenny|guy/i.test(v.name)?5:0)+(/en[-_]US/i.test(v.lang)?2:0)+(v.localService?1:0);return vs.sort((a,b)=>rank(b)-rank(a))[0]}catch(e){return null}}
+try{if('speechSynthesis' in window)speechSynthesis.onvoiceschanged=()=>{tutVoiceObj=pickVoice()}}catch(e){}
+function tutSpeak(txt){try{if(!('speechSynthesis' in window))return;speechSynthesis.cancel();if(!S.set.voice||!T||!T.play)return;tutVoiceObj=tutVoiceObj||pickVoice();const u=new SpeechSynthesisUtterance(txt);if(tutVoiceObj){u.voice=tutVoiceObj;u.lang=tutVoiceObj.lang}else u.lang='en-US';u.rate=.95;u.pitch=1;speechSynthesis.speak(u)}catch(e){}}
 function tutAt(t){let a=0;for(let i=0;i<T.ch.length;i++){if(t<a+T.ch[i].d)return{i,lt:t-a};a+=T.ch[i].d}return{i:T.ch.length-1,lt:T.ch[T.ch.length-1].d}}
 function tutFrame(now){
  if(!T)return;
@@ -894,7 +903,7 @@ function tutFrame(now){
  const {i,lt}=tutAt(T.t),c=T.ch[i],x=T.x,P=PAT[x.p];
  if(i!==T.cur){T.cur=i;$('#tutCh').textContent=`${i+1}/${T.ch.length} · ${c.k}`;
   $('#tutCap').innerHTML=c.mode==='mistake'?`<b>✗ ${esc(c.w.charAt(0).toUpperCase()+c.w.slice(1))}</b><br>✓ ${esc(c.fx.charAt(0).toUpperCase()+c.fx.slice(1))}.`:esc(c.say);
-  $('#tutMap').style.display=c.mode==='map'?'block':'none';$('#tutSvg').style.display=c.mode==='map'?'none':'block';
+  $('#tutMap').style.display=c.mode==='map'?'block':'none';$('#tutPh').style.display=c.mode==='map'?'none':'block';$('#tutPip').style.display=c.mode==='map'?'none':'block';
   tutSpeak(c.say)}
  // figure pose
  let f=.65,q;const ms=lt*1000;
@@ -909,7 +918,8 @@ function tutFrame(now){
  $('#tutBadge').className='tbadge '+badge;
  const te=$('#tutTempo');te.style.display=tempo?'block':'none';te.textContent=tempo;
  const rp=$('#tutRep');rp.style.display=rep?'block':'none';rp.textContent=rep;
- if(c.mode!=='map'&&P){q=lerp(P[0],P[1],f);if(x.prop)q.prop=x.prop==='none'?null:x.prop;if(lean){q.t+=lean;if(c.m==='sag'){q.th-=lean}}$('#tutSvg').innerHTML=fig(q,x.pri)}
+ if(c.mode!=='map'){const B=$('#tutB'),Aa=$('#tutA'),z=(1.03+.025*Math.sin(T.t/3)).toFixed(4),pan=(Math.sin(T.t/5)*1.2).toFixed(2);B.style.opacity=Math.max(0,Math.min(1,f)).toFixed(3);Aa.style.transform=B.style.transform=`scale(${z}) translateX(${pan}%)`;
+  const fx=$('#tutFx');fx.className='badfx'+(c.mode==='mistake'?(lt<c.d/2?' bad':' good'):'');}
  // progress
  let a=0;document.querySelectorAll('#tutSegs b').forEach((b,j)=>{const d=T.ch[j].d;b.style.width=(T.t>=a+d?100:T.t<=a?0:(T.t-a)/d*100)+'%';a+=d});
  $('#tutTime').textContent=`Video tutorial · ${fmt(T.t)} / ${fmt(T.tot)}`;
