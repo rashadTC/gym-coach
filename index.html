@@ -715,18 +715,22 @@ function platesHtml(w,inline){
  let side=(w-20)/2;const out=[];for(const[p,c]of PLATES){while(side>=p-1e-9){out.push([p,c]);side-=p}}
  return`<div class="plates"${inline?' style="margin-left:0"':''}>${out.length?'Each side:':'Empty bar (20 kg)'} ${out.map(([p,c])=>`<span class="pc ${c}">${p}</span>`).join('')}${side>.01?` <span>+${(side*2).toFixed(2)} kg can't be loaded</span>`:''}</div>`;
 }
-function warmSets(it,w){
- const x=EX[it.id],heavy=['bench','incline','squat','hinge','deadlift','ohp','row','pulldown','bridge'].includes(x.p);
- if(!heavy||!['bb','db','machine','cable'].includes(x.eq))return[];
- if((x.eq==='bb'&&w<30)||(x.eq==='db'&&w<10)||(x.eq!=='bb'&&x.eq!=='db'&&w<20))return[];
- const step=x.eq==='db'?(x.up||2):2.5,sch=it.lo<=6?[[.4,8],[.6,5],[.8,3]]:[[.5,10],[.75,5]],out=[];
- sch.forEach(([p,r])=>{let v=Math.round(w*p/step)*step;if(x.eq==='bb')v=Math.max(20,v);if(v<w&&!out.some(o=>o.w===v))out.push({p,w:v,r})});
+function warmSets(it,w,idx){
+ const x=EX[it.id],heavy=['bench','incline','push','squat','lunge','hinge','deadlift','ohp','row','invrow','pulldown','bridge','swing'].includes(x.p);
+ if(!heavy&&idx>1)return[];
+ if(x.u==='s')return[{p:.5,w:0,r:Math.round(it.lo/2),lbl:'Easy',sec:1}];
+ if(x.eq==='bw'||w<=0)return[{p:.5,w:0,r:Math.max(3,Math.ceil(it.hi/2)),lbl:'Easy'}];
+ if(x.eq==='bb'&&w<=20)return[{p:.5,w:20,r:10,lbl:'Bar'}];
+ const step=x.eq==='db'?(x.up||2):2.5,big=(x.eq==='bb'&&w>=40)||(x.eq==='db'&&w>=14)||(x.eq!=='bb'&&x.eq!=='db'&&w>=30);
+ const sch=!big?[[.5,10]]:it.lo<=6?[[.4,8],[.6,5],[.8,3]]:[[.5,10],[.75,5]],out=[];
+ sch.forEach(([p,r])=>{let v=Math.round(w*p/step)*step;if(x.eq==='bb')v=Math.max(20,v);if(v<=0)v=step;if(v<w&&!out.some(o=>o.w===v))out.push({p,w:v,r,lbl:x.eq==='bb'&&v===20?'Bar':''})});
+ if(!out.length)out.push({p:.5,w:0,r:10,lbl:'Easy'});
  return out;
 }
 function warmHtml(it,A){
- const sets=A.sets[it.id],w=num((sets.find(s=>!s.d)||sets[0]||{}).w),ws=warmSets(it,w);if(!ws.length)return'';
+ const sets=A.sets[it.id],w=num((sets.find(s=>!s.d)||sets[0]||{}).w),ws=warmSets(it,w,A.items.indexOf(it));if(!ws.length)return'';
  const st=(A.warm||{})[it.id]||[],x=EX[it.id];
- return`<div class="wu"><div class="row"><b>🔥 Warm-up sets</b><span class="sp muted small">not counted</span></div>${ws.map((v,j)=>`<div class="r"><span class="muted small b" style="width:3em">${Math.round(v.p*100)}%</span><span style="flex:1"><b>${v.w} kg × ${v.r}</b>${x.eq==='bb'?platesHtml(v.w,1):''}</span><button class="done ${st[j]?'on':''}" data-act="warm" data-a="${j}" aria-label="Warm-up ${j+1} done">✓</button></div>`).join('')}</div>`;
+ return`<div class="wu"><div class="row"><b>🔥 Warm-up ${ws.length>1?'sets':'set'}</b><span class="sp muted small">not counted · tap ✓ when done</span></div>${ws.map((v,j)=>`<div class="r"><span class="muted small b" style="width:3em">${v.lbl||Math.round(v.p*100)+'%'}</span><span style="flex:1"><b>${v.w?`${v.w} kg × ${v.r}`:v.sec?`${v.r} s easy hold`:`${v.r} easy reps${x.eq==='bw'?'':' (light / empty)'}`}</b>${x.eq==='bb'&&v.w?platesHtml(v.w,1):''}</span><button class="done ${st[j]?'on':''}" data-act="warm" data-a="${j}" aria-label="Warm-up ${j+1} done">✓</button></div>`).join('')}</div>`;
 }
 let wl=null;
 async function wake(on){try{if(on){if(!wl&&navigator.wakeLock&&document.visibilityState==='visible'){wl=await navigator.wakeLock.request('screen');wl.addEventListener('release',()=>{wl=null})}}else if(wl){const w=wl;wl=null;await w.release()}}catch(e){wl=null}}
