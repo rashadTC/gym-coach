@@ -7,3 +7,5 @@ A personal 4-day training app (strength, hypertrophy, mobility and endurance), b
 **Data:** saved in the browser on each device, no login needed. Use Profile → Export to back up or move to a new phone.
 
 **Install on iPhone:** open the site in Safari → Share → Add to Home Screen.
+
+**Credits:** exercise photos from [free-exercise-db](https://github.com/yuhonas/free-exercise-db), released into the public domain (Unlicense).

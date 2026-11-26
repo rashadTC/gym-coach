@@ -157,6 +157,18 @@ table{width:100%;border-collapse:collapse;font-size:15px}td{padding:9px 2px;bord
 .confetti{position:fixed;inset:0;pointer-events:none;z-index:70;overflow:hidden}
 .confetti i{position:absolute;top:-10px;width:9px;height:14px;border-radius:2px;animation:fall 2.6s ease-in forwards}
 @keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
+/* photos */
+.hero .fig.hp{width:112px;height:112px;right:14px;top:14px;border-radius:50%;overflow:hidden;box-shadow:0 0 0 3px #ffffff59}.hero .fig.hp img{width:100%;height:100%;object-fit:cover}
+.ph{position:relative;aspect-ratio:4/3;border-radius:18px;overflow:hidden;background:#111;margin:12px 0}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ph img.b,.ph .l2{animation:phx 3.4s ease-in-out infinite}.ph .l1{animation:phy 3.4s ease-in-out infinite}
+@keyframes phx{0%,38%{opacity:0}50%,88%{opacity:1}100%{opacity:0}}@keyframes phy{0%,38%{opacity:1}50%,88%{opacity:0}100%{opacity:1}}
+.ph .lab{position:absolute;left:10px;bottom:10px;background:#000a;color:#fff;font-weight:700;font-size:13px;padding:4px 10px;border-radius:99px}
+.ph .cnt{position:absolute;left:10px;top:10px;background:var(--hot);color:#fff;font-weight:700;font-size:13px;padding:3px 10px;border-radius:99px}
+.mrow2{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;align-items:center}
+.mrow2 .demo{margin:0;padding:2px}
+img.thumb{object-fit:cover}
+.credit{font-size:12px;color:var(--mute);margin-top:14px}
 /* v4 */
 .mrow{padding:6px 0}.mrow .bx{cursor:pointer}.mrow .mname{flex:1;text-align:left;min-height:44px;padding:4px 0}.mrow.sel{background:color-mix(in srgb,var(--brand) 9%,transparent);border-radius:12px;padding-left:6px;margin-inline:-6px}
 .week i.pl{box-shadow:inset 0 0 0 2px var(--eq)}.week i.ms{color:var(--hot)}
@@ -251,7 +263,7 @@ cablerow:{n:'Seated cable row',p:'row',prop:'bar',pri:['lats','traps'],sec:['bic
 dbrow:{n:'One-arm DB row',p:'row',prop:'db',pri:['lats'],sec:['biceps','traps'],eq:'db',s:3,r:[8,12],up:2,b:'Unilateral back work that fixes imbalances and builds the lats.',c:['Flat back, hand on a bench','Pull toward the hip, not the chest','Full stretch at the bottom']},
 facepull:{n:'Face pull',p:'row',prop:'bar',pri:['shoulders','traps'],sec:[],eq:'cable',s:3,r:[15,20],up:2.5,b:'Strengthens rear delts and the rotator cuff, which protects the shoulders and fixes posture.',c:['Rope to forehead','Elbows high','Thumbs point back at the end']},
 reardelt:{n:'Rear-delt DB fly',p:'row',prop:'db',pri:['shoulders','traps'],sec:[],eq:'db',s:3,r:[12,15],up:1,b:'Builds the back of the shoulders for posture and a 3D look.',c:['Hinge forward, flat back','Lead with the pinkies','Light weight, slow tempo']},
-ytw:{n:'Y-T-W raises',p:'raise',pri:['shoulders','traps'],sec:['lowerback'],eq:'bw',s:3,r:[8,10],up:0,b:'Equipment-free shoulder health: strengthens the rear delts and lower traps.',c:['Lie face down or hinge forward','Make Y, T and W shapes with the arms','Squeeze for two seconds each']},
+ytw:{n:'Superman raises',p:'raise',pri:['shoulders','traps'],sec:['lowerback','glutes'],eq:'bw',s:3,r:[10,12],up:0,b:'Equipment-free back and shoulder health: strengthens the rear delts, upper back and lower back.',c:['Lie face down, arms stretched overhead','Lift arms, chest and legs a few centimetres','Hold for two seconds, then lower slowly']},
 pullapart:{n:'Band pull-apart',p:'raise',pri:['shoulders','traps'],sec:[],eq:'bw',s:3,r:[15,20],up:0,b:'Rear-delt and upper-back work with just a resistance band; great for posture.',c:['Arms straight at shoulder height','Pull the band to your chest','Squeeze the shoulder blades for one second']},
 ohp:{n:'Seated DB shoulder press',p:'ohp',prop:'db',pri:['shoulders'],sec:['triceps','traps'],eq:'db',s:3,r:[8,10],up:2,b:'Builds rounder shoulders and overhead strength.',c:['Ribs down, back on the pad','Press up and slightly in','Lower to ear level']},
 latraise:{n:'Lateral raise',p:'raise',prop:'db',pri:['shoulders'],sec:['traps'],eq:'db',s:4,r:[12,15],up:1,b:'Builds the side delts for wider-looking shoulders.',c:['Lead with the elbows','Stop at shoulder height','Lower slowly, no swinging']},
@@ -284,7 +296,7 @@ const PLAN=[
  {n:'Upper · Hypertrophy',items:[['incline',3,10,12],['cablerow',3,10,12],['latraise',4,12,15],['curl',3,10,12],['pushdown',3,10,12],['pushup',2,10,25]],end:'Circuit: 3 rounds of 12 KB swings, 10 burpees, 200 m run (12 min)',end2:'Circuit: 3 rounds of 15 squat jumps, 10 burpees, 30 s high knees (12 min)'},
  {n:'Lower · Conditioning',items:[['deadlift',4,4,5],['bss',3,8,8],['thrust',3,10,12],['legraise',3,10,12],['plank',3,45,45]],end:'Zone 2 cardio: 20 min (you can still talk)',end2:'Zone 2 cardio: 20 min brisk walk or easy cycle'}
 ];
-const MOB=[['Cat-cow','× 10','catcow','On hands and knees. Round your back up to the ceiling, then let the belly drop and look up. Move slowly with your breath.'],['World\'s greatest stretch','× 5 per side','wgs','Step into a deep lunge, put the hand inside your front foot, then rotate and reach the other arm up to the ceiling.'],['90/90 hip switches','× 8 per side','hip90','Sit tall with both knees bent at 90°. Rotate both knees to one side, then the other, without using your hands.'],['Deep goblet squat hold','45 s','gobhold','Hold a light dumbbell at your chest and sit as deep as you can. Push the knees out with your elbows and keep the chest up.'],['Band pull-aparts','× 15','pullapart','Arms straight at shoulder height. Pull the band apart to your chest and squeeze the shoulder blades together.'],['Thoracic rotations','× 8 per side','thoracic','On all fours, one hand behind your head. Rotate that elbow up toward the ceiling, following it with your eyes.']];
+const MOB=[['Cat-cow','× 10','m_catcow','On hands and knees. Round your back up to the ceiling, then let the belly drop and look up. Move slowly with your breath.'],['World\'s greatest stretch','× 5 per side','m_wgs','Step into a deep lunge, put the hand inside your front foot, then rotate and reach the other arm up to the ceiling.'],['Standing hip circles','× 8 per side','m_hip','Stand tall holding a support. Lift one knee and draw big slow circles with it, opening the hip out to the side.'],['Deep goblet squat hold','45 s','m_gob','Hold a light dumbbell at your chest and sit as deep as you can. Push the knees out with your elbows and keep the chest up.'],['Band pull-aparts','× 15','m_band','Arms straight at shoulder height. Pull the band apart to your chest and squeeze the shoulder blades together.'],['Seated spinal twist','× 8 per side','m_twist','Sit tall, hands behind your head. Rotate your upper back to one side, then the other, keeping the hips still.']];
 const GOALS={muscle:['💪','Build muscle','Gain size with a small calorie surplus'],strength:['🏋️','Get stronger','Lift heavier, small surplus'],recomp:['⚖️','Recomp','Lose fat and build muscle at maintenance'],fat:['🔥','Lose fat','Keep muscle in a calorie deficit']};
 const EQUIP={gym:['🏢','Full gym','Barbells, machines, cables'],db:['🏠','Dumbbells','Home or hotel gym with dumbbells'],bw:['🤸','Bodyweight','No equipment, just a pull-up bar']};
 const LEVELS={beg:['🌱','Beginner','Under 6 months of training'],int:['⚡','Intermediate','6 months to 2 years'],adv:['🔥','Advanced','2+ years, solid technique']};
@@ -371,6 +383,8 @@ const phaseFor=(p,ms)=>{if(ECC.has(p))return phase(ms);const t=(ms%3400)/3400,e=
 const phase=ms=>{const t=(ms%3400)/3400,e=x=>(1-Math.cos(Math.PI*x))/2;return t<.12?0:t<.55?e((t-.12)/.43):t<.65?1:1-e((t-.65)/.35)};
 function fillFig(el,f){const id=el.dataset.ex,x=EX[id],p=x?x.p:el.dataset.p,P=PAT[p];if(!P)return;const q=lerp(P[0],P[1],f);if(x&&x.prop)q.prop=x.prop==='none'?null:x.prop;el.innerHTML=fig(q,x?x.pri:[])}
 const figSvg=(id,live,cls)=>`<svg viewBox="0 0 200 200" class="${cls||''}" data-ex="${id}" ${live?'data-live="1"':'data-still="1"'} aria-hidden="true"></svg>`;
+const photo=(k,extra)=>`<div class="ph"><img src="img/${k}-0.jpg" alt="Start position" loading="lazy"><img class="b" src="img/${k}-1.jpg" alt="Finish position" loading="lazy"><span class="lab l1">Start</span><span class="lab l2">Finish</span>${extra||''}</div>`;
+const thumbImg=k=>`<img class="thumb" src="img/${k}-0.jpg" alt="" loading="lazy">`;
 let lastF=0;
 function loop(ts){if(ts-lastF>32){lastF=ts;document.querySelectorAll('svg[data-live]').forEach(el=>{const x=EX[el.dataset.ex],p=x?x.p:el.dataset.p;fillFig(el,RM?.7:phaseFor(p,ts))})}requestAnimationFrame(loop)}
 requestAnimationFrame(loop);
@@ -485,7 +499,7 @@ function coachMsg(){
 }
 
 // ================= VIEWS =================
-const exRow=(id,s,lo,hi,extra)=>{const x=EX[id];return`<button class="ex" data-act="ex" data-a="${id}" data-s="${s}" data-lo="${lo}" data-hi="${hi}">${figSvg(id,0,'thumb')}<div><div class="nm">${esc(x.n)}</div><div class="muted small">${s} × ${reps(lo,hi,x)} · ${EQN[x.eq]}${extra||''}</div><div>${x.pri.map(m=>`<span class="chip p">${MUS[m]}</span>`).join('')}</div></div><span class="arrow">›</span></button>`};
+const exRow=(id,s,lo,hi,extra)=>{const x=EX[id];return`<button class="ex" data-act="ex" data-a="${id}" data-s="${s}" data-lo="${lo}" data-hi="${hi}">${thumbImg(id)}<div><div class="nm">${esc(x.n)}</div><div class="muted small">${s} × ${reps(lo,hi,x)} · ${EQN[x.eq]}${extra||''}</div><div>${x.pri.map(m=>`<span class="chip p">${MUS[m]}</span>`).join('')}</div></div><span class="arrow">›</span></button>`};
 function vHome(){
  const A=S.active,i=S.next%4,items=A?A.items:dayItems(i),first=items[0].id,hr=new Date().getHours();
  const ws=weekStart(Date.now()),days=new Set(S.logs.map(l=>dk(l.d))),wk=S.logs.filter(l=>inWeek(l,ws)).length,M=macros(),F=today(),[ic,msg]=coachMsg();
@@ -493,7 +507,7 @@ function vHome(){
  const done=doneOn(Date.now()),train=isTrainDay(Date.now());
  const kick=A?'In progress':done?'Done today ✓':!train?`Rest day · next workout ${nextTrainDay()}`:`Day ${i+1} · Week ${blockWeek()} of 5`;
  const btn=A?['resume','Resume workout →','w']:done?['tab','See your progress →','w']:!train?['startNext','Train anyway →','g2']:['startNext','Start workout →','w'];
- let h=`<div class="card hero"><div class="fig">${figSvg(first,1)}</div><div class="body"><div class="k">${esc(kick)}</div><h2>${esc(A?A.name:done?'Great work today!':PLAN[i].n)}</h2><div class="k">${done&&!A?`Up next: ${esc(PLAN[i].n)}`:`${estMin(items)} min · ${items.length} exercises`}</div><div style="margin:8px 0 14px">${mus.map(m=>`<span class="chip">${MUS[m]}</span>`).join('')}</div></div><button class="btn big ${btn[2]==='w'?'w':''}" ${btn[2]==='g2'?'style="background:#ffffff26;color:#fff"':''} data-act="${btn[0]}" ${btn[0]==='tab'?'data-a="stats"':''}>${btn[1]}</button></div>`;
+ let h=`<div class="card hero"><div class="fig hp"><img src="img/${first}-0.jpg" alt=""></div><div class="body"><div class="k">${esc(kick)}</div><h2>${esc(A?A.name:done?'Great work today!':PLAN[i].n)}</h2><div class="k">${done&&!A?`Up next: ${esc(PLAN[i].n)}`:`${estMin(items)} min · ${items.length} exercises`}</div><div style="margin:8px 0 14px">${mus.map(m=>`<span class="chip">${MUS[m]}</span>`).join('')}</div></div><button class="btn big ${btn[2]==='w'?'w':''}" ${btn[2]==='g2'?'style="background:#ffffff26;color:#fff"':''} data-act="${btn[0]}" ${btn[0]==='tab'?'data-a="stats"':''}>${btn[1]}</button></div>`;
  const tdk=dk(Date.now());
  h+=`<div class="card"><div class="row"><h3 style="margin:0">This week</h3><span class="sp muted small b">${wk}/${S.days.length} sessions</span></div><div class="week" style="margin-top:10px">${['M','T','W','T','F','S','S'].map((d,k)=>{const t=ws+k*864e5,key=dk(t),pl=isTrainDay(t),dn=days.has(key),ms=pl&&!dn&&key<tdk&&key>=S.since;return`<div>${d}<i class="${dn?'on':''} ${key===tdk?'td':''} ${pl&&!dn?'pl':''} ${ms?'ms':''}">${dn?'✓':new Date(t).getDate()}</i></div>`}).join('')}</div><p class="muted small" style="margin:8px 0 0">Outlined days are your training days. Change them in Profile.</p></div>`;
  h+=`<div class="stats" style="margin-bottom:14px"><div class="stat"><b>${streak()}</b><span>Week streak</span></div><div class="stat"><b>${S.logs.length}</b><span>Workouts</span></div><div class="stat"><b>${Object.keys(S.ach).length}</b><span>Badges</span></div></div>`;
@@ -631,8 +645,8 @@ function closeSheet(){$('#sheet').classList.remove('open');$('#back').classList.
 function exSheet(id,s,lo,hi){
  const x=EX[id],g=suggest(id,lo,hi),b=bestOf(id),L=lastFor(id);
  openSheet(`<div class="row"><div><div class="muted small b">${EQN[x.eq]} · ${s} × ${reps(lo,hi,x)}</div><h2>${esc(x.n)}</h2></div><button class="btn g sm sp" data-act="closeSheet" aria-label="Close">✕</button></div>
- <div class="pair"><div class="demo">${figSvg(id,1)}</div><div class="demo">${mmap(x.pri,x.sec)}</div></div>
- <div>${mchips(x)}</div><p class="muted small" style="margin:4px 0 0">Glowing coral = main muscles · light = also working</p>
+ ${photo(id)}
+ <div class="mrow2"><div class="demo">${mmap(x.pri,x.sec)}</div><div>${mchips(x)}<p class="muted small" style="margin:6px 0 0">Coral = main muscles · light = also working</p></div></div>
  <button class="btn big tut-btn" style="margin-top:12px" data-act="tut" data-a="${id}" data-s="${s}" data-lo="${lo}" data-hi="${hi}">▶ Watch video tutorial · ${tutLen(id,s,lo,hi)}</button>
  <h3 style="margin-top:16px">Why it's in your plan</h3><p style="margin:6px 0">${esc(x.b)}</p>
  <h3 style="margin-top:12px">Form cues</h3>${x.c.map((c,k)=>`<div class="row" style="align-items:flex-start;margin:8px 0"><span class="chip p" style="margin:0">${k+1}</span><span>${esc(c)}</span></div>`).join('')}
@@ -659,6 +673,7 @@ function profileSheet(){
  <h3 style="margin-top:18px">Training days</h3><p class="muted small" style="margin:4px 0 8px">Your 4 workouts rotate through these days. Home and the coach follow this schedule.</p><div class="dayp">${WK.map(d=>`<button class="${S.days.includes(d)?'on':''}" data-act="dayTog" data-a="${d}" aria-label="${DAYN[d]}">${DAYN[d].slice(0,3)}</button>`).join('')}</div>
  <button class="tick ${S.set.sound?'on':''}" data-act="sound" style="margin-top:10px"><span class="bx">${S.set.sound?'✓':''}</span><span>Beep when rest is over</span></button><button class="tick ${S.set.voice?'on':''}" data-act="voiceSet"><span class="bx">${S.set.voice?'✓':''}</span><span>Voice narration in video tutorials</span></button>
  <h3 style="margin-top:18px">⌚ Apple Watch</h3><p class="muted small" style="margin:4px 0 8px">After a workout, tap <b>Add Apple Watch data</b> on the summary screen to bring in heart rate and calories. It needs a one-time Shortcut setup.</p><details><summary class="b" style="cursor:pointer;min-height:36px">Show setup steps</summary>${scSteps()}</details><button class="btn g big" style="margin-top:6px" data-act="watch">Add Watch data to last workout</button>
+ <p class="credit">Exercise photos: free-exercise-db (public domain).</p>
  <h3 style="margin-top:18px">Backup</h3><p class="muted small" style="margin:4px 0 10px">Your data is stored on this phone. Export a backup now and then, or to move to a new phone.</p><div class="grid2"><button class="btn g" data-act="exp">⬇ Export</button><label class="btn g" style="cursor:pointer">⬆ Import<input type="file" id="imp" accept=".json,application/json" hidden></label></div>
  <div class="grid2" style="margin-top:18px"><button class="btn g" data-act="redo">Redo setup</button><button class="btn g" data-act="reset" style="color:var(--hot)">Reset ${esc(myName())}</button></div>`);
 }
@@ -693,13 +708,13 @@ function renderLive(){
  let bar='';
  if(k===0){
   const ms=A.mobSel!=null?A.mobSel:(()=>{const f=MOB.findIndex((_,j)=>!A.mob[j]);return f<0?MOB.length-1:f})(),M=MOB[ms];
-  h+=`<div class="muted small b">Step 1 · 10 min · ${A.mob.filter(Boolean).length}/${MOB.length} done</div><h2 style="margin:4px 0 12px">Mobility warm-up</h2><div class="lvfig" style="position:relative"><svg viewBox="0 0 200 200" data-live="1" data-p="${M[2]}" aria-hidden="true"></svg><span class="chip p" style="position:absolute;left:12px;top:12px;margin:0">${ms+1}/${MOB.length}</span></div>
+  h+=`<div class="muted small b">Step 1 · 10 min · ${A.mob.filter(Boolean).length}/${MOB.length} done</div><h2 style="margin:4px 0 12px">Mobility warm-up</h2>${photo(M[2],`<span class="cnt">${ms+1}/${MOB.length}</span>`)}
   <div style="margin:12px 2px 0"><h3 style="margin:0">${esc(M[0])} <span class="muted" style="font-size:17px">${esc(M[1])}</span></h3><p class="small" style="margin:4px 0 0">${esc(M[3])}</p>${A.mob[ms]?'':`<button class="btn ok sm" style="margin-top:8px" data-act="mob" data-a="${ms}">✓ Done, next drill</button>`}</div>
   <div class="card" style="margin-top:12px">${MOB.map(([m,d],j)=>`<div class="tick mrow ${A.mob[j]?'on':''} ${j===ms?'sel':''}"><button class="bx" data-act="mob" data-a="${j}" aria-label="Mark ${esc(m)} done">${A.mob[j]?'✓':''}</button><button class="tx mname" data-act="mobSel" data-a="${j}"><b>${esc(m)}</b> <span class="muted">${esc(d)}</span>${j===ms?' <span class="chip" style="margin:0 0 0 4px">showing ▶</span>':''}</button></div>`).join('')}</div>`;
   bar=`<button class="btn big" data-act="next">Start lifting →</button>`;
  }else if(k<=A.items.length){
   const it=A.items[k-1],x=EX[it.id],sets=A.sets[it.id],g=suggest(it.id,it.lo,it.hi),cur=sets.findIndex(s=>!s.d),nxt=A.items[k];
-  h+=`<div class="row"><div><div class="muted small b">Exercise ${k} of ${A.items.length} · ${EQN[x.eq]}</div><h2 style="margin:4px 0 10px">${esc(x.n)}</h2></div><button class="btn g sm sp" data-act="liveSwap" aria-label="Swap exercise">⇄ Swap</button></div><div class="pair"><div class="lvfig">${figSvg(it.id,1)}</div><div class="lvfig">${mmap(x.pri,x.sec)}</div></div><div style="margin-top:8px">${mchips(x)}</div><div class="note"><b>Coach:</b> ${esc(g.txt)}${g.last?`<br><span class="muted small">Last time: ${esc(g.last)}</span>`:''}</div>
+  h+=`<div class="row"><div><div class="muted small b">Exercise ${k} of ${A.items.length} · ${EQN[x.eq]}</div><h2 style="margin:4px 0 10px">${esc(x.n)}</h2></div><button class="btn g sm sp" data-act="liveSwap" aria-label="Swap exercise">⇄ Swap</button></div>${photo(it.id)}<div class="mrow2"><div class="demo">${mmap(x.pri,x.sec)}</div><div>${mchips(x)}</div></div><div class="note"><b>Coach:</b> ${esc(g.txt)}${g.last?`<br><span class="muted small">Last time: ${esc(g.last)}</span>`:''}</div>
   <button class="btn sm tut-btn" style="margin-top:10px" data-act="tut" data-a="${it.id}" data-s="${it.s}" data-lo="${it.lo}" data-hi="${it.hi}">▶ Video tutorial · ${tutLen(it.id,it.s,it.lo,it.hi)}</button>
   <details style="margin-top:10px"><summary class="b" style="cursor:pointer;min-height:32px">Form cues</summary>${x.c.map(c=>`<div class="small" style="margin:6px 0">• ${esc(c)}</div>`).join('')}</details>
   ${warmHtml(it,A)}
@@ -958,7 +973,7 @@ const ACT={
  liveSwap:()=>{const A=A_(),it=A.items[A.step-1],x=EX[it.id],used=new Set(A.items.map(i=>i.id)),ok=e=>EQOK[S.profile.eq||'gym'].includes(e);
   const alts=Object.keys(EX).filter(k=>!used.has(k)&&EX[k].pri.some(m=>x.pri.includes(m))).sort((a,b)=>(EX[b].pri[0]===x.pri[0])-(EX[a].pri[0]===x.pri[0])||ok(EX[b].eq)-ok(EX[a].eq));
   const done=(A.sets[it.id]||[]).some(s=>s.d);
-  openSheet(`<div class="row"><div><div class="muted small b">Swap ${esc(x.n)}</div><h2>Equipment busy?</h2></div><button class="btn g sm sp" data-act="closeSheet" aria-label="Close">✕</button></div><p class="muted small">Alternatives for the same muscles. ${done?'Sets you already logged here will be cleared.':''}</p>${alts.length?alts.map(k=>{const y=EX[k];return`<button class="ex" data-act="liveSwapTo" data-a="${k}">${figSvg(k,0,'thumb')}<div><div class="nm">${esc(y.n)}</div><div class="muted small">${EQN[y.eq]} · ${y.s} × ${reps(y.r[0],y.r[1],y)}</div><div>${y.pri.map(m=>`<span class="chip p">${MUS[m]}</span>`).join('')}</div></div><span class="arrow">›</span></button>`}).join(''):'<p class="muted">No alternatives left in this workout.</p>'}`)},
+  openSheet(`<div class="row"><div><div class="muted small b">Swap ${esc(x.n)}</div><h2>Equipment busy?</h2></div><button class="btn g sm sp" data-act="closeSheet" aria-label="Close">✕</button></div><p class="muted small">Alternatives for the same muscles. ${done?'Sets you already logged here will be cleared.':''}</p>${alts.length?alts.map(k=>{const y=EX[k];return`<button class="ex" data-act="liveSwapTo" data-a="${k}">${thumbImg(k)}<div><div class="nm">${esc(y.n)}</div><div class="muted small">${EQN[y.eq]} · ${y.s} × ${reps(y.r[0],y.r[1],y)}</div><div>${y.pri.map(m=>`<span class="chip p">${MUS[m]}</span>`).join('')}</div></div><span class="arrow">›</span></button>`}).join(''):'<p class="muted">No alternatives left in this workout.</p>'}`)},
  liveSwapTo:a=>{const A=A_(),it=A.items[A.step-1],old=it.id,X=EX[a];delete A.sets[old];if(A.warm)delete A.warm[old];if(A.feel)delete A.feel[old];it.id=a;it.lo=X.r[0];it.hi=X.r[1];const g=suggest(a,it.lo,it.hi);A.sets[a]=Array.from({length:it.s},()=>({w:g.w||0,r:X.u==='s'?it.lo:it.hi,d:false}));save();closeSheet();renderLive();$('#live').scrollTop=0;toast(`Swapped to ${X.n}`)},
  dayTog:a=>{const d=+a,has=S.days.includes(d);if(has&&S.days.length<=2){toast('Keep at least 2 training days');return}S.days=has?S.days.filter(x=>x!==d):[...S.days,d];save();profileSheet();render()},
  obDay:a=>{const d=+a,ds=ob.days;ob.days=ds.includes(d)?ds.filter(x=>x!==d):[...ds,d];renderOnb()},
