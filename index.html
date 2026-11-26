@@ -22,12 +22,12 @@
 :root{color-scheme:light dark;--bg:light-dark(#f2f4fa,#0a0d19);--s1:light-dark(#ffffff,#141a2f);--s2:light-dark(#e8ecf7,#1d2442);--ink:light-dark(#0c1124,#f1f3ff);--mute:light-dark(#5d6688,#9aa3c9);--line:light-dark(#dfe4f1,#262f55);--brand:#3552f0;--sky:#21b0ff;--hot:#ff5a36;--hot2:light-dark(#ffd3c6,#5c2b22);--ok:#17b27a;--limb:light-dark(#2b3356,#dde3ff);--torso:light-dark(#3a4470,#c3ccf5);--eq:light-dark(#9aa4c8,#4a5687);--top:env(safe-area-inset-top,0px);--bot:env(safe-area-inset-bottom,0px)}
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box;min-width:0;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Barlow,system-ui,sans-serif;overflow-x:clip}
+html,body{-webkit-text-size-adjust:100%;margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Barlow,system-ui,sans-serif;overflow-x:clip}
 h1,h2,h3{font-family:"Barlow Condensed",sans-serif;line-height:1.05;margin:0;text-wrap:balance;letter-spacing:.2px}
 h1{font-size:40px}h2{font-size:28px}h3{font-size:21px}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
 button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(--hot);outline-offset:2px;border-radius:10px}
-#app{max-width:600px;margin:0 auto;min-height:100vh;padding:calc(var(--top) + 14px) 16px calc(var(--bot) + 96px)}
+#app{max-width:600px;margin:0 auto;min-height:100vh;min-height:100dvh;padding:calc(var(--top) + 14px) 16px calc(var(--bot) + 96px)}
 .top{display:flex;align-items:flex-end;gap:12px;margin-bottom:16px}
 .top .sub{color:var(--mute);font-weight:600;font-size:15px}
 .avatar{margin-left:auto;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--sky));color:#fff;font:700 19px "Barlow Condensed",sans-serif;flex:none}
@@ -100,7 +100,7 @@ table{width:100%;border-collapse:collapse;font-size:15px}td{padding:9px 2px;bord
 /* sheet */
 #back{position:fixed;inset:0;background:#0009;z-index:48;opacity:0;pointer-events:none;transition:opacity .25s}
 #back.open{opacity:1;pointer-events:auto}
-#sheet{position:fixed;left:50%;bottom:0;width:min(600px,100%);max-height:92vh;overflow:auto;background:var(--s1);border-radius:26px 26px 0 0;z-index:49;transform:translate(-50%,105%);transition:transform .3s cubic-bezier(.2,.8,.2,1);padding:10px 16px calc(var(--bot) + 24px)}
+#sheet{position:fixed;left:50%;bottom:0;width:min(600px,100%);max-height:92vh;max-height:calc(100dvh - var(--top) - 12px);overflow:auto;background:var(--s1);border-radius:26px 26px 0 0;z-index:49;transform:translate(-50%,105%);transition:transform .3s cubic-bezier(.2,.8,.2,1);padding:10px 16px calc(var(--bot) + 24px)}
 #sheet.open{transform:translate(-50%,0)}
 .grab{width:42px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 10px}
 .demo{background:var(--s2);border-radius:20px;padding:6px;margin:12px 0}
@@ -124,7 +124,7 @@ table{width:100%;border-collapse:collapse;font-size:15px}td{padding:9px 2px;bord
 .clock{font:700 22px "Barlow Condensed",sans-serif;color:var(--brand)}
 .prog{display:flex;gap:4px;margin:12px 0 16px}.prog i{flex:1;height:5px;border-radius:3px;background:var(--s2)}.prog i.d{background:var(--ok)}.prog i.c{background:var(--brand)}
 .lvfig{background:var(--s1);border:1px solid var(--line);border-radius:24px;padding:4px}
-.lvfig svg{width:100%;height:auto;display:block;max-height:36vh}
+.lvfig svg{width:100%;height:auto;display:block;max-height:36vh;max-height:34dvh}
 .sets{margin-top:12px}
 .setr{display:grid;grid-template-columns:2.2em minmax(0,1fr) minmax(0,1fr) 48px;gap:8px;align-items:center;padding:8px;border-radius:16px;margin-top:6px}
 .setr.cur{background:var(--s1);border:1px solid var(--brand)}
@@ -144,16 +144,16 @@ table{width:100%;border-collapse:collapse;font-size:15px}td{padding:9px 2px;bord
 /* onboarding */
 #onb{position:fixed;inset:0;z-index:60;background:var(--bg);display:none;overflow:auto;padding:calc(var(--top) + 18px) 20px calc(var(--bot) + 24px)}
 #onb.open{display:block}
-#onb .in{max-width:520px;margin:0 auto;min-height:calc(100vh - 60px);display:flex;flex-direction:column}
+#onb .in{max-width:520px;margin:0 auto;min-height:calc(100vh - 60px);min-height:calc(100dvh - var(--top) - var(--bot) - 42px);display:flex;flex-direction:column}
 .dots{display:flex;gap:6px;margin-bottom:24px}.dots i{flex:1;height:5px;border-radius:3px;background:var(--s2)}.dots i.on{background:var(--brand)}
 .opt{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:var(--s1);border:2px solid var(--line);border-radius:18px;padding:14px;margin-bottom:10px}
 .opt.on{border-color:var(--brand);background:color-mix(in srgb,var(--brand) 10%,var(--s1))}
 .opt em{font-style:normal;font-size:26px;width:44px;height:44px;border-radius:14px;background:var(--s2);display:grid;place-items:center;flex:none}
 .opt b{display:block}.opt span{color:var(--mute);font-size:14px}
 .big-in{font:700 40px "Barlow Condensed",sans-serif;text-align:center;min-height:70px}
-.onbnav{margin-top:auto;padding-top:20px;display:flex;gap:10px}
-#toast{position:fixed;left:50%;top:calc(var(--top) + 12px);transform:translate(-50%,-150%);background:var(--ink);color:var(--bg);padding:11px 18px;border-radius:14px;z-index:80;font-weight:600;transition:transform .3s;max-width:90vw;text-align:center}
-#toast.on{transform:translate(-50%,0)}
+.onbnav{margin-top:auto;padding:16px 0 4px;display:flex;gap:10px;position:sticky;bottom:0;background:linear-gradient(transparent,var(--bg) 22%)}
+#toast{position:fixed;left:50%;top:calc(var(--top) + 12px);transform:translate(-50%,-30px);opacity:0;visibility:hidden;pointer-events:none;background:var(--ink);color:var(--bg);padding:11px 18px;border-radius:14px;z-index:80;font-weight:600;transition:transform .3s,opacity .3s,visibility .3s;max-width:90vw;text-align:center}
+#toast.on{transform:translate(-50%,0);opacity:1;visibility:visible}
 .confetti{position:fixed;inset:0;pointer-events:none;z-index:70;overflow:hidden}
 .confetti i{position:absolute;top:-10px;width:9px;height:14px;border-radius:2px;animation:fall 2.6s ease-in forwards}
 @keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
